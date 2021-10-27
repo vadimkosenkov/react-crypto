@@ -1,11 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
 import "bootstrap/dist/css/bootstrap.css";
+import App from "./App";
+import cryptoSlice from "./toolkitSlice/cryptoSlice";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+
+const store = configureStore({
+  reducer: {
+    crypto: cryptoSlice,
+  },
+});
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={store}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById("root")
 );

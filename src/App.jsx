@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./App.scss";
 import Main from "./components/Main/Main";
 import Header from "./components/Header/Header";
+import Details from "./components/Details/Details";
+import { BrowserRouter, Route } from "react-router-dom";
 
 function App() {
   const [data, setData] = useState([]);
@@ -16,16 +18,15 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
-      <div className="wrap">
-        <header className="header row">
+    <BrowserRouter>
+      <div className="app">
+        <div className="wrap">
           <Header data={data} />
-        </header>
-        <main className="main">
-          <Main data={data} />
-        </main>
+          <Route exact path="/" render={() => <Main data={data} />} />
+          <Route path="/id" component={Details} />
+        </div>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
 

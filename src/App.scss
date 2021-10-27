@@ -20,48 +20,11 @@ $br: 5px;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-
-  .wrap {
-    width: 95%;
-    height: 95%;
-    background-color: $color-w;
-    border-radius: $br;
-    .header {
-      width: 100%;
-      margin: 0;
-      background-color: $color-g;
-      height: 60px;
-      align-items: center;
-      border-radius: $br $br 0 0;
-      box-shadow: 0px 0px 5px 0 $color-b;
-      img {
-        width: 16px;
-        height: 16px;
-      }
-    }
-    .main {
-      height: 87%;
-      margin: 20px 0;
-    }
-  }
 }
 
-.header__portfolio,
-.header__trending {
-  height: 100%;
-  border-left: 1px solid $color-b;
-}
-
-.header__title {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.header__name {
-  font-size: 14px;
-  text-transform: uppercase;
-}
-.header__price {
-  font-size: 16px;
-  font-weight: 600;
+.wrap {
+  width: 95%;
+  height: 95%;
+  background-color: $color-w;
+  border-radius: $br;
 }
