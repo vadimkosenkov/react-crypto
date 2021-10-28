@@ -1,19 +1,19 @@
 import React from "react";
 import CryptoItem from "../CryptoItem/CryptoItem";
+import { connect } from "react-redux";
 
-const CryptoList = ({ data }) => {
+const CryptoList = ({ data, show, setShow }) => {
   return data.map((elem) => {
     return (
-      <CryptoItem
-        key={elem.id}
-        name={elem.name}
-        symbol={elem.symbol}
-        priceUsd={elem.priceUsd}
-        changePercent24Hr={elem.changePercent24Hr}
-        marketCapUsd={elem.marketCapUsd}
-      />
+      <CryptoItem elem={elem} key={elem.id} show={show} setShow={setShow} />
     );
   });
 };
 
-export default CryptoList;
+const mapStateToProps = (state) => {
+  return {
+    data: state.cryptoList.assets,
+  };
+};
+
+export default connect(mapStateToProps)(CryptoList);

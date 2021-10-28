@@ -1,5 +1,6 @@
 import React from "react";
 import TrendingItem from "../TrendingItem/TrendingItem";
+import { connect } from "react-redux";
 
 const TrendingList = ({ data }) => {
   return data.map((elem) => {
@@ -10,4 +11,11 @@ const TrendingList = ({ data }) => {
     );
   });
 };
-export default TrendingList;
+
+const mapStateToProps = (state) => {
+  return {
+    data: state.cryptoList.assets,
+  };
+};
+
+export default connect(mapStateToProps)(TrendingList);
