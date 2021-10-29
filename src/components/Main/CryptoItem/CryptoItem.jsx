@@ -2,7 +2,10 @@ import React from "react";
 import "./CryptoItem.scss";
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { setCurrentCrypto } from "../../../toolkitSlice/cryptoListSlice";
+import {
+  getCurrentHistory,
+  setCurrentCrypto,
+} from "../../../toolkitSlice/cryptoListSlice";
 import ModallAddCrypto from "../../ModalAddCrypto/ModalAddCrypto";
 
 const CryptoItem = ({ elem, show, setShow }) => {
@@ -10,15 +13,17 @@ const CryptoItem = ({ elem, show, setShow }) => {
   const handleShow = () => setShow(true);
 
   const shorterValue = (value) => {
-    return Math.round(value * 100) / 100;
+    value = +value;
+    return value.toFixed(6);
   };
 
   return (
     <>
       <tr
         className="align-middle"
-        onClick={(e) => {
+        onClick={() => {
           dispatch(setCurrentCrypto(elem));
+          dispatch(updateHistory(elem));
         }}
       >
         <td className="col-1">
@@ -26,7 +31,6 @@ const CryptoItem = ({ elem, show, setShow }) => {
             variant="primary"
             className="w-100"
             onClick={(e) => {
-              // e.preventDefault();
               handleShow();
             }}
           >
@@ -44,6 +48,21 @@ const CryptoItem = ({ elem, show, setShow }) => {
       <ModallAddCrypto elem={elem} show={show} setShow={setShow} />
     </>
   );
+};
+
+const updateHistory = (elem) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(
+        `https://api.coincap.io/v2/assets/${elem.id}/history?interval=d1`,
+        { method: "GET" }
+      );
+      const json = await response.json();
+      dispatch(getCurrentHistory(json.data));
+    } catch (e) {
+      console.log("Request error. Please try again", e);
+    }
+  };
 };
 
 export default CryptoItem;

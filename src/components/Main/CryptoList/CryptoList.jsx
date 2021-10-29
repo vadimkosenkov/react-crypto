@@ -1,8 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CryptoItem from "../CryptoItem/CryptoItem";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
+import { setListToLocalStorage } from "../../../toolkitSlice/portfolioSlice";
 
 const CryptoList = ({ data, show, setShow }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getDataFromLocalStorage();
+  }, [data]);
+
+  const getDataFromLocalStorage = () => {
+    const list = localStorage.getItem("list");
+    if (list) {
+      dispatch(setListToLocalStorage(JSON.parse(list)));
+    }
+  };
+
   return data.map((elem) => {
     return (
       <CryptoItem elem={elem} key={elem.id} show={show} setShow={setShow} />

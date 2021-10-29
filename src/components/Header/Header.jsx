@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import "./Header.scss";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
-import { addResult } from "../../toolkitSlice/portfolioSlice";
+import {
+  addResult,
+  deleteItem,
+  setListToLocalStorage,
+} from "../../toolkitSlice/portfolioSlice";
 import Modal from "react-bootstrap/Modal";
 import TrendingList from "./TrendingList/TrendingList";
 import { useDispatch } from "react-redux";
@@ -18,25 +22,35 @@ const Header = ({ data = "", dataAll = "" }) => {
   }, [data.list]);
 
   const portfolioTotal = (data, dataAll) => {
-    // totalCost = количество * цена / округлить
-    // newTotalCost = количество * Новая цена dataAll / округлить
-    // diffCost = newtotalCost - totalCost
-    // diffPersent = diffCost / totalCost * 100
-
-    const totalCostArr = data.list?.map((elem) => elem.amount * elem.priceUsd);
-    const totalCostSumm = totalCostArr.reduce(
+    const activeId = data.list?.map((elem) => elem.id);
+    //массив id крипты в портфеле
+    const filterData = dataAll.assets.filter(
+      (elem) => activeId.indexOf(elem.id) !== -1
+    ); // отфильтрованный массив всей крипты по наличию в портфеле
+    const totalArr = data.list?.map((elem) => elem.amount * elem.priceUsd);
+    // массив стоимостей активов портфеля
+    const totalCost = totalArr.reduce((sum, current) => sum + current, 0);
+    // сумма активов портфеля
+    const totalShort = totalCost.toFixed(2);
+    // сокращённая сумма активов портфеля
+    const totalArrNew = filterData.map((elem) => {
+      const amount = data.list?.find((item) => item.id === elem.id).amount;
+      return amount * elem.priceUsd;
+    }); // массив стоимостей активов портфеля NEW
+    const totalCostNew = totalArrNew?.reduce(
       (sum, current) => sum + current,
       0
-    );
-    const totalCostSummShort = Math.round(totalCostSumm * 100) / 100;
+    ); // сумма активов портфеля NEW
+    let diffCost = totalCostNew - totalCost;
+    // разница активов в валюте
+    const diffPersent = (diffCost / totalCost) * 100;
+    // разница активов в процентах
 
     return {
-      totalCost: totalCostSummShort,
-      newtotalCost: "0",
-      diffCost: "0",
-      diffPersent: "0",
+      totalCost: totalShort,
+      diffCost: diffCost > 0 ? `+${diffCost.toFixed(2)}` : diffCost.toFixed(2),
+      diffPersent: diffPersent ? diffPersent.toFixed(2) : 0,
     };
-    // TODO;
   };
 
   return (
@@ -65,9 +79,17 @@ const Header = ({ data = "", dataAll = "" }) => {
         <Modal.Body>
           {data.list.length ? (
             data.list.map((elem) => {
+              const list = data.list.filter((item) => item.id !== elem.id);
               return (
                 <div className="mb-2 d-flex align-items-center" key={elem.id}>
-                  <Button variant="primary" type="submit" className="me-2">
+                  <Button
+                    variant="primary"
+                    className="me-2"
+                    onClick={() => {
+                      dispatch(deleteItem(elem));
+                      localStorage.setItem("list", JSON.stringify(list));
+                    }}
+                  >
                     Delete
                   </Button>
                   <span className="h4 me-0">
@@ -83,17 +105,14 @@ const Header = ({ data = "", dataAll = "" }) => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" size="lg" onClick={handleClose}>
-            Cancel
-          </Button>
           <Button
-            variant="primary"
+            variant="secondary"
             size="lg"
             form="buyForm"
             type="submit"
             onClick={handleClose}
           >
-            Save changes
+            Close
           </Button>
         </Modal.Footer>
       </Modal>

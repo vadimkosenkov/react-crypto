@@ -15,8 +15,7 @@ const cryptoListSlice = createSlice({
       state.currentCrypto = action.payload;
     },
     getCurrentHistory(state, action) {
-      // state.currentHistory = action.payload;
-      state.currentHistory.push([...action.payload]);
+      state.currentHistory = action.payload;
     },
   },
 });

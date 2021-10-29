@@ -18,8 +18,32 @@ const ModallAddCrypto = ({ elem, show, setShow }) => {
 
   const onFormSubmit = () => {
     dispatch(addCrypto({ ...elem, amount: value }));
+    setListToLocalStorage({ ...elem, amount: value });
     setValue();
   };
+
+  const setListToLocalStorage = (item) => {
+    const list = localStorage.getItem("list");
+    if (list) {
+      let parcedList = JSON.parse(list);
+
+      const currentItem = parcedList.find((elem) => elem.id === item.id);
+
+      if (currentItem) {
+        parcedList = parcedList.map((elem) =>
+          elem.id === currentItem.id
+            ? { ...elem, amount: +elem.amount + +item.amount }
+            : elem
+        );
+      } else {
+        parcedList.push(item);
+      }
+      localStorage.setItem("list", JSON.stringify(parcedList));
+    } else {
+      localStorage.setItem("list", JSON.stringify([item]));
+    }
+  };
+
   return (
     <Modal
       show={show}
@@ -53,7 +77,7 @@ const ModallAddCrypto = ({ elem, show, setShow }) => {
         <Button
           variant="primary"
           size="lg"
-          onClick={(e) => {
+          onClick={() => {
             onFormSubmit();
             handleClose();
           }}

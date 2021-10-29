@@ -1,19 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button, Table } from "react-bootstrap";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
 import ModallAddCrypto from "../ModalAddCrypto/ModalAddCrypto";
-import getCurrentHistory from "./../../toolkitSlice/cryptoListSlice";
-import { useDispatch } from "react-redux";
 
-const Details = ({ data, show, setShow }) => {
-  const dispatch = useDispatch();
+const Details = ({ data, show, setShow, currentHistory }) => {
   const handleShow = () => setShow(true);
+  let correctHistory = [];
 
-  useEffect(() => {
-    dispatch(updateHistory());
-    console.log(data.id);
-  }, [data.id]);
+  currentHistory.map((elem, i) => {
+    if (i % 30 === 0) {
+      correctHistory.push({
+        name: elem.date,
+        uv: elem.priceUsd,
+      });
+    }
+  });
 
   return (
     <div style={{ textAlign: "center" }}>
@@ -50,30 +60,34 @@ const Details = ({ data, show, setShow }) => {
       <Button variant="primary" size="lg" className="mx-2" onClick={handleShow}>
         BUY
       </Button>
-      <h3 className="my-3">Тут будет history</h3>
-      <ModallAddCrypto elem={data} show={show} setShow={setShow} />
+      <div className="d-flex justify-content-center">
+        <AreaChart
+          width={750}
+          height={350}
+          data={correctHistory}
+          margin={{
+            top: 10,
+            right: 0,
+            left: 0,
+            bottom: 0,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
+        </AreaChart>
+        <ModallAddCrypto elem={data} show={show} setShow={setShow} />
+      </div>
     </div>
   );
-};
-
-const updateHistory = () => {
-  return async (dispatch) => {
-    try {
-      const response = await fetch(
-        "https://api.coincap.io/v2/assets/bitcoin/history?interval=d1",
-        { method: "GET" }
-      );
-      const json = await response.json();
-      dispatch(getCurrentHistory(json.data));
-    } catch (e) {
-      console.log("Request error. Please try again", e);
-    }
-  };
 };
 
 const mapStateToProps = (state) => {
   return {
     data: state.cryptoList.currentCrypto,
+    currentHistory: state.cryptoList.currentHistory,
   };
 };
 
