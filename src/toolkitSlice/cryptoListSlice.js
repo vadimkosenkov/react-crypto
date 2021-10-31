@@ -9,6 +9,7 @@ const cryptoListSlice = createSlice({
   },
   reducers: {
     getAssets(state, action) {
+      state.assets = [];
       state.assets.push(...action.payload);
     },
     setCurrentCrypto(state, action) {

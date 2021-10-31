@@ -17,7 +17,7 @@ const Details = ({ data, show, setShow, currentHistory }) => {
   let correctHistory = [];
 
   currentHistory.map((elem, i) => {
-    if (i % 30 === 0) {
+    if (i % 7 === 0) {
       correctHistory.push({
         name: elem.date,
         uv: elem.priceUsd,

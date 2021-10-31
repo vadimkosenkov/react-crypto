@@ -1,4 +1,16 @@
 .main {
-  height: 87%;
-  margin: 20px 0;
+  min-height: 463px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.table.table-md.table-striped.table-bordered.table-hover {
+  margin: 0;
+}
+
+.pagination {
+  margin: 5px 0;
+  display: flex;
+  justify-content: center;
 }

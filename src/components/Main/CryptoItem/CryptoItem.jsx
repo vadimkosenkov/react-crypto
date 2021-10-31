@@ -27,20 +27,14 @@ const CryptoItem = ({ elem, show, setShow }) => {
         }}
       >
         <td className="col-1">
-          <Button
-            variant="primary"
-            className="w-100"
-            onClick={(e) => {
-              handleShow();
-            }}
-          >
+          <Button variant="primary" className="w-100" onClick={handleShow}>
             BUY
           </Button>
         </td>
-        <td className="col-1 h5">{elem.name}</td>
+        <td className="col-2 h5">{elem.name}</td>
         <td className="col-1 h5">{elem.symbol}</td>
         <td className="col-3 h4">{`$ ${shorterValue(elem.priceUsd)}`}</td>
-        <td className="col-3 h5">{`${shorterValue(
+        <td className="col-2 h5">{`${shorterValue(
           elem.changePercent24Hr
         )} %`}</td>
         <td className="col-3">{`$ ${shorterValue(elem.marketCapUsd)}`}</td>
@@ -55,9 +49,13 @@ const updateHistory = (elem) => {
     try {
       const response = await fetch(
         `https://api.coincap.io/v2/assets/${elem.id}/history?interval=d1`,
-        { method: "GET" }
+        {
+          method: "GET",
+          edirect: "follow",
+        }
       );
       const json = await response.json();
+
       dispatch(getCurrentHistory(json.data));
     } catch (e) {
       console.log("Request error. Please try again", e);

@@ -3,12 +3,12 @@ import TrendingItem from "../TrendingItem/TrendingItem";
 import { connect } from "react-redux";
 
 const TrendingList = ({ data }) => {
-  return data.map((elem) => {
-    return elem.rank < 4 ? (
-      <TrendingItem key={elem.id} name={elem.name} priceUsd={elem.priceUsd} />
-    ) : (
-      ""
-    );
+  return data.map((elem, i) => {
+    if (i < 3) {
+      return (
+        <TrendingItem key={elem.id} name={elem.name} priceUsd={elem.priceUsd} />
+      );
+    }
   });
 };
 
