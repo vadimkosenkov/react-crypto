@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import CryptoItem from "../CryptoItem/CryptoItem";
-import { connect, useDispatch } from "react-redux";
 import { setListToLocalStorage } from "../../../toolkitSlice/portfolioSlice";
+import { connect, useDispatch } from "react-redux";
 
 const CryptoList = ({ data, show, setShow }) => {
   const dispatch = useDispatch();

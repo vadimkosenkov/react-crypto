@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./Main.scss";
-import { Table } from "react-bootstrap";
 import CryptoList from "./CryptoList/CryptoList";
+import { Spinner, Table, Pagination } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
-import { Pagination } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { getAssets } from "../../toolkitSlice/cryptoListSlice";
+import { connect, useDispatch } from "react-redux";
+import { getAssets, setLoader } from "../../toolkitSlice/cryptoListSlice";
 
-const Main = ({ show, setShow }) => {
+const Main = ({ show, setShow, loader }) => {
   const dispatch = useDispatch();
   const [offset, setOffset] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
@@ -65,14 +64,19 @@ const Main = ({ show, setShow }) => {
   const updateAssets = (limit, offset) => {
     return async (dispatch) => {
       try {
+        dispatch(setLoader(true));
         const response = await fetch(
-          `https://api.coincap.io/v2/assets?limit=${limit}&offset=${offset}`,
+          `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets?limit=${limit}&offset=${offset}`,
           {
             method: "GET",
             redirect: "follow",
+            headers: {
+              Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
+            },
           }
         );
         const json = await response.json();
+        dispatch(setLoader(false));
         dispatch(getAssets(json.data));
       } catch (e) {
         console.log("Request error. Please try again", e);
@@ -82,6 +86,9 @@ const Main = ({ show, setShow }) => {
 
   return (
     <main className="main">
+      <div className="preloader">
+        {loader ? <Spinner animation="border" variant="primary" /> : ""}
+      </div>
       <NavLink to="/id" className="text-decoration-none">
         <Table striped bordered hover size="md">
           <tbody>
@@ -102,4 +109,10 @@ const Main = ({ show, setShow }) => {
   );
 };
 
-export default Main;
+const mapStateToProps = (state) => {
+  return {
+    loader: state.cryptoList.loader,
+  };
+};
+
+export default connect(mapStateToProps)(Main);

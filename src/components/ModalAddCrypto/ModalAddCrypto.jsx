@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { addCrypto } from "../../toolkitSlice/portfolioSlice";
+import { useDispatch } from "react-redux";
 import {
   Button,
   Form,
   FormControl,
   FormLabel,
   FormText,
+  Modal,
 } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
-import { useDispatch } from "react-redux";
-import { addCrypto } from "../../toolkitSlice/portfolioSlice";
 
 const ModallAddCrypto = ({ elem, show, setShow }) => {
   const dispatch = useDispatch();

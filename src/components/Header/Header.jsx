@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
-import { Button } from "react-bootstrap";
-import { connect } from "react-redux";
-import {
-  addResult,
-  deleteItem,
-  setListToLocalStorage,
-} from "../../toolkitSlice/portfolioSlice";
-import Modal from "react-bootstrap/Modal";
 import TrendingList from "./TrendingList/TrendingList";
-import { useDispatch } from "react-redux";
+import { Button, Modal } from "react-bootstrap";
+import { connect, useDispatch } from "react-redux";
+import { addResult, deleteItem } from "../../toolkitSlice/portfolioSlice";
 
 const Header = ({ data = "", dataAll = "" }) => {
   const [show, setShow] = useState(false);

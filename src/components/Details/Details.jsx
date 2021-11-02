@@ -1,5 +1,7 @@
 import React from "react";
-import { Button, Table } from "react-bootstrap";
+import "./Details.scss";
+import ModallAddCrypto from "../ModalAddCrypto/ModalAddCrypto";
+import { Button, Table, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
 import {
@@ -10,9 +12,8 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import ModallAddCrypto from "../ModalAddCrypto/ModalAddCrypto";
 
-const Details = ({ data, show, setShow, currentHistory }) => {
+const Details = ({ data, show, setShow, currentHistory, loader }) => {
   const handleShow = () => setShow(true);
   let correctHistory = [];
 
@@ -26,7 +27,7 @@ const Details = ({ data, show, setShow, currentHistory }) => {
   });
 
   return (
-    <div style={{ textAlign: "center" }}>
+    <div className="details">
       <h1 className="my-2">{data.name} details info</h1>
       <Table striped bordered hover>
         <thead>
@@ -61,23 +62,35 @@ const Details = ({ data, show, setShow, currentHistory }) => {
         BUY
       </Button>
       <div className="d-flex justify-content-center">
-        <AreaChart
-          width={750}
-          height={350}
-          data={correctHistory}
-          margin={{
-            top: 10,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
-        </AreaChart>
+        <div className="preloader">
+          {loader ? <Spinner animation="border" variant="primary" /> : ""}
+        </div>
+        {!loader ? (
+          <AreaChart
+            width={850}
+            height={350}
+            data={correctHistory}
+            margin={{
+              top: 10,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Area
+              type="monotone"
+              dataKey="uv"
+              stroke="#8884d8"
+              fill="#8884d8"
+            />
+          </AreaChart>
+        ) : (
+          ""
+        )}
         <ModallAddCrypto elem={data} show={show} setShow={setShow} />
       </div>
     </div>
@@ -88,6 +101,7 @@ const mapStateToProps = (state) => {
   return {
     data: state.cryptoList.currentCrypto,
     currentHistory: state.cryptoList.currentHistory,
+    loader: state.cryptoList.loader,
   };
 };
 

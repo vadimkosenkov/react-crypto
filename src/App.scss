@@ -24,6 +24,18 @@ $br: 5px;
 
 .wrap {
   width: 95%;
+  height: 90%;
   background-color: $color-w;
   border-radius: $br;
+}
+
+.preloader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.spinner-border {
+  width: 4rem;
+  height: 4rem;
 }
