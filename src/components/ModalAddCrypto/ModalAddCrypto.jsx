@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./ModalAddCrypto.scss";
 import { addCrypto } from "../../toolkitSlice/portfolioSlice";
 import { useDispatch } from "react-redux";
 import {

@@ -5,7 +5,15 @@ const cryptoListSlice = createSlice({
   initialState: {
     assets: [],
     currentHistory: [],
-    currentCrypto: {},
+    currentElem: {
+      name: " ",
+      rank: " ",
+      symbol: " ",
+      priceUsd: " ",
+      changePercent24Hr: " ",
+      vwap24Hr: " ",
+      marketCapUsd: " ",
+    },
     loader: false,
   },
   reducers: {
@@ -13,10 +21,10 @@ const cryptoListSlice = createSlice({
       state.assets = [];
       state.assets.push(...action.payload);
     },
-    setCurrentCrypto(state, action) {
-      state.currentCrypto = action.payload;
+    setCurrentElem(state, action) {
+      state.currentElem = action.payload;
     },
-    getCurrentHistory(state, action) {
+    setCurrentHistory(state, action) {
       state.currentHistory = action.payload;
     },
     setLoader(state, action) {
@@ -26,5 +34,5 @@ const cryptoListSlice = createSlice({
 });
 
 export default cryptoListSlice.reducer;
-export const { getAssets, setCurrentCrypto, getCurrentHistory, setLoader } =
+export const { getAssets, setCurrentElem, setCurrentHistory, setLoader } =
   cryptoListSlice.actions;

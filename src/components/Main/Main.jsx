@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./Main.scss";
 import CryptoList from "./CryptoList/CryptoList";
 import { Spinner, Table, Pagination } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
 import { connect, useDispatch } from "react-redux";
 import { getAssets, setLoader } from "../../toolkitSlice/cryptoListSlice";
 
@@ -89,13 +88,11 @@ const Main = ({ show, setShow, loader }) => {
       <div className="preloader">
         {loader ? <Spinner animation="border" variant="primary" /> : ""}
       </div>
-      <NavLink to="/id" className="text-decoration-none">
-        <Table striped bordered hover size="md">
-          <tbody>
-            <CryptoList show={show} setShow={setShow} />
-          </tbody>
-        </Table>
-      </NavLink>
+      <Table striped bordered hover size="md" className="table">
+        <tbody>
+          <CryptoList show={show} setShow={setShow} />
+        </tbody>
+      </Table>
       <Pagination>
         <Pagination.Prev disabled={pageNumber === 1} onClick={prevClick} />
         {items}

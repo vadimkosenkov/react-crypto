@@ -2,16 +2,16 @@ import React from "react";
 import "./CryptoItem.scss";
 import ModallAddCrypto from "../../ModalAddCrypto/ModalAddCrypto";
 import { Button } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import {
-  getCurrentHistory,
-  setCurrentCrypto,
-  setLoader,
-} from "../../../toolkitSlice/cryptoListSlice";
+import { useHistory } from "react-router-dom";
 
 const CryptoItem = ({ elem, show, setShow }) => {
-  const dispatch = useDispatch();
+  const history = useHistory();
   const handleShow = () => setShow(true);
+
+  const routeChange = (elem) => {
+    const path = `./details/${elem.id}`;
+    history.push(path);
+  };
 
   const shorterValue = (value) => {
     value = +value;
@@ -21,10 +21,9 @@ const CryptoItem = ({ elem, show, setShow }) => {
   return (
     <>
       <tr
-        className="align-middle"
+        className="table__item"
         onClick={() => {
-          dispatch(setCurrentCrypto(elem));
-          dispatch(updateHistory(elem));
+          routeChange(elem);
         }}
       >
         <td className="col-1">
@@ -43,29 +42,6 @@ const CryptoItem = ({ elem, show, setShow }) => {
       <ModallAddCrypto elem={elem} show={show} setShow={setShow} />
     </>
   );
-};
-
-const updateHistory = (elem) => {
-  return async (dispatch) => {
-    try {
-      dispatch(setLoader(true));
-      const response = await fetch(
-        `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets/${elem.id}/history?interval=d1`,
-        {
-          method: "GET",
-          edirect: "follow",
-          headers: {
-            Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-          },
-        }
-      );
-      const json = await response.json();
-      dispatch(setLoader(false));
-      dispatch(getCurrentHistory(json.data));
-    } catch (e) {
-      console.log("Request error. Please try again", e);
-    }
-  };
 };
 
 export default CryptoItem;

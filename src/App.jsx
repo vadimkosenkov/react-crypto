@@ -19,7 +19,7 @@ function App() {
             render={() => <Main show={show} setShow={setShow} />}
           />
           <Route
-            path="/id"
+            path="/details/:id"
             render={() => <Details show={show} setShow={setShow} />}
           />
         </div>

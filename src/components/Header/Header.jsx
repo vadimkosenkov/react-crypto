@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
+import portfolio from "./../../portfolio.png";
 import TrendingList from "./TrendingList/TrendingList";
 import { Button, Modal } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
@@ -59,7 +60,7 @@ const Header = ({ data = "", dataAll = "" }) => {
         {data.result?.diffPersent}%)
         <img
           className="header__img"
-          src="./portfolio.png"
+          src={portfolio}
           alt="logo:portfolio"
           onClick={handleShow}
         />
