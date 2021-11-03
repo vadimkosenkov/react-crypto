@@ -41,53 +41,60 @@ const Details = ({ show, setShow, loader, currentHistory, currentElem }) => {
 
   return (
     <div className="details">
-      <h1 className="my-2">Details info</h1>
-      <div className="details__table">
-        {!loader ? (
-          <Table striped bordered hover>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Name</th>
-                <th>Symbol</th>
-                <th>Price USD</th>
-                <th>Change Percent 24Hr</th>
-                <th>Vwap 24Hr</th>
-                <th>Market Cap Usd</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>{currentElem.rank}</td>
-                <td>{currentElem.name}</td>
-                <td>{currentElem.symbol}</td>
-                <td>{`$ ${currentElem.priceUsd}`}</td>
-                <td>{`${currentElem.changePercent24Hr} %`}</td>
-                <td>{currentElem.vwap24Hr}</td>
-                <td>{`$ ${currentElem.marketCapUsd}`}</td>
-              </tr>
-            </tbody>
-          </Table>
-        ) : (
-          ""
-        )}
-      </div>
+      {!loader ? (
+        <>
+          <h1 className="my-2"> {currentElem.name} details info</h1>
+          <div className="details__table">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Name</th>
+                  <th>Symbol</th>
+                  <th>Price USD</th>
+                  <th>Change Percent 24Hr</th>
+                  <th>Vwap 24Hr</th>
+                  <th>Market Cap Usd</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{currentElem.rank}</td>
+                  <td>{currentElem.name}</td>
+                  <td>{currentElem.symbol}</td>
+                  <td>{`$ ${currentElem.priceUsd}`}</td>
+                  <td>{`${currentElem.changePercent24Hr} %`}</td>
+                  <td>{currentElem.vwap24Hr}</td>
+                  <td>{`$ ${currentElem.marketCapUsd}`}</td>
+                </tr>
+              </tbody>
+            </Table>
+            <NavLink to="/" className="text-decoration-none">
+              <Button variant="secondary" size="lg">
+                BACK
+              </Button>
+            </NavLink>
+            <Button
+              variant="primary"
+              size="lg"
+              className="mx-2"
+              onClick={handleShow}
+            >
+              BUY
+            </Button>
+          </div>
+        </>
+      ) : (
+        ""
+      )}
 
-      <NavLink to="/" className="text-decoration-none">
-        <Button variant="secondary" size="lg">
-          BACK
-        </Button>
-      </NavLink>
-      <Button variant="primary" size="lg" className="mx-2" onClick={handleShow}>
-        BUY
-      </Button>
       <div className="d-flex justify-content-center">
         <div className="preloader">
           {loader ? <Spinner animation="border" variant="primary" /> : ""}
         </div>
         {!loader ? (
           <AreaChart
-            width={850}
+            width={1200}
             height={340}
             data={correctedHistory}
             margin={{

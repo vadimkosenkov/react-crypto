@@ -19,11 +19,11 @@ const ModallAddCrypto = ({ elem, show, setShow }) => {
 
   const onFormSubmit = () => {
     dispatch(addCrypto({ ...elem, amount: value }));
-    setListToLocalStorage({ ...elem, amount: value });
+    setToLocalStorage({ ...elem, amount: value });
     setValue();
   };
 
-  const setListToLocalStorage = (item) => {
+  const setToLocalStorage = (item) => {
     const list = localStorage.getItem("list");
     if (list) {
       let parcedList = JSON.parse(list);

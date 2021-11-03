@@ -4,47 +4,89 @@ import portfolio from "./../../portfolio.png";
 import TrendingList from "./TrendingList/TrendingList";
 import { Button, Modal } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { addResult, deleteItem } from "../../toolkitSlice/portfolioSlice";
+import {
+  addResult,
+  deleteItem,
+  setListFromLocalStorage,
+  updateList,
+} from "../../toolkitSlice/portfolioSlice";
 
-const Header = ({ data = "", dataAll = "" }) => {
+const Header = ({ list, updatedList, result, assets, currentHistory }) => {
   const [show, setShow] = useState(false);
+  const [ids, setIds] = useState();
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(addResult(portfolioTotal(data, dataAll)));
-  }, [data.list]);
+    getDataFromLocalStorage();
+  }, [assets]);
 
-  const portfolioTotal = (data, dataAll) => {
-    const activeId = data.list?.map((elem) => elem.id);
-    //массив id крипты в портфеле
-    const filterData = dataAll.assets.filter(
-      (elem) => activeId.indexOf(elem.id) !== -1
-    ); // отфильтрованный массив всей крипты по наличию в портфеле
-    const totalArr = data.list?.map((elem) => elem.amount * elem.priceUsd);
-    // массив стоимостей активов портфеля
-    const totalCost = totalArr.reduce((sum, current) => sum + current, 0);
-    // сумма активов портфеля
-    const totalShort = totalCost.toFixed(2);
-    // сокращённая сумма активов портфеля
-    const totalArrNew = filterData.map((elem) => {
-      const amount = data.list?.find((item) => item.id === elem.id).amount;
+  useEffect(() => {
+    setIds(list?.map((elem) => elem.id).join(","));
+  }, [list]);
+
+  useEffect(() => {
+    dispatch(getUpdatedList(ids));
+  }, [assets, currentHistory]);
+
+  useEffect(() => {
+    if (list?.length && updatedList?.length) {
+      dispatch(addResult(portfolioTotal(list, updatedList)));
+    }
+  }, [updatedList]);
+
+  const setDataToLocalStorage = (list) => {
+    localStorage.setItem("list", JSON.stringify(list));
+  };
+
+  const getDataFromLocalStorage = () => {
+    const list = localStorage.getItem("list");
+    if (list) {
+      dispatch(setListFromLocalStorage(JSON.parse(list)));
+    }
+  };
+
+  const portfolioTotal = (list, updatedList) => {
+    const myTotalArr = list?.map((elem) => elem.amount * elem.priceUsd);
+    const myTotalCost = myTotalArr.reduce((sum, current) => sum + current, 0);
+
+    const totalArr = updatedList?.map((elem) => {
+      const amount = list?.find((item) => item.id === elem.id).amount;
       return amount * elem.priceUsd;
-    }); // массив стоимостей активов портфеля NEW
-    const totalCostNew = totalArrNew?.reduce(
-      (sum, current) => sum + current,
-      0
-    ); // сумма активов портфеля NEW
-    let diffCost = totalCostNew - totalCost;
-    // разница активов в валюте
+    });
+    const totalCost = totalArr.reduce((sum, current) => sum + current, 0);
+
+    let diffCost = totalCost - myTotalCost;
     const diffPersent = (diffCost / totalCost) * 100;
-    // разница активов в процентах
 
     return {
-      totalCost: totalShort,
+      totalCost: myTotalCost.toFixed(2),
       diffCost: diffCost > 0 ? `+${diffCost.toFixed(2)}` : diffCost.toFixed(2),
       diffPersent: diffPersent ? diffPersent.toFixed(2) : 0,
+    };
+  };
+
+  const getUpdatedList = (ids) => {
+    return async (dispatch) => {
+      if (ids) {
+        try {
+          const response = await fetch(
+            `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets?ids=${ids}`,
+            {
+              method: "GET",
+              edirect: "follow",
+              headers: {
+                Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
+              },
+            }
+          );
+          const json = await response.json();
+          dispatch(updateList(json.data));
+        } catch (e) {
+          console.log("Request error. Please try again", e);
+        }
+      }
     };
   };
 
@@ -56,8 +98,7 @@ const Header = ({ data = "", dataAll = "" }) => {
       </div>
       <div className="header__portfolio col-3 d-flex justify-content-around align-items-center">
         Portfolio Tracker <br />
-        {data.result?.totalCost} USD {data.result?.diffCost} (
-        {data.result?.diffPersent}%)
+        {result?.totalCost} USD {result?.diffCost} ({result?.diffPersent}%)
         <img
           className="header__img"
           src={portfolio}
@@ -72,9 +113,9 @@ const Header = ({ data = "", dataAll = "" }) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {data.list.length ? (
-            data.list.map((elem) => {
-              const list = data.list.filter((item) => item.id !== elem.id);
+          {list.length ? (
+            list.map((elem) => {
+              const updList = list.filter((item) => item.id !== elem.id);
               return (
                 <div className="mb-2 d-flex align-items-center" key={elem.id}>
                   <Button
@@ -82,7 +123,7 @@ const Header = ({ data = "", dataAll = "" }) => {
                     className="me-2"
                     onClick={() => {
                       dispatch(deleteItem(elem));
-                      localStorage.setItem("list", JSON.stringify(list));
+                      setDataToLocalStorage(updList);
                     }}
                   >
                     Delete
@@ -117,8 +158,11 @@ const Header = ({ data = "", dataAll = "" }) => {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.portfolio,
-    dataAll: state.cryptoList,
+    list: state.portfolio.list,
+    updatedList: state.portfolio.updatedList,
+    result: state.portfolio.result,
+    assets: state.cryptoList.assets,
+    currentHistory: state.cryptoList.currentHistory,
   };
 };
 

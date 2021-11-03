@@ -5,15 +5,7 @@ const cryptoListSlice = createSlice({
   initialState: {
     assets: [],
     currentHistory: [],
-    currentElem: {
-      name: " ",
-      rank: " ",
-      symbol: " ",
-      priceUsd: " ",
-      changePercent24Hr: " ",
-      vwap24Hr: " ",
-      marketCapUsd: " ",
-    },
+    currentElem: {},
     loader: false,
   },
   reducers: {

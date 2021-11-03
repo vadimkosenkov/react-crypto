@@ -5,6 +5,7 @@ const portfolioSlice = createSlice({
   initialState: {
     result: {},
     list: [],
+    updatedList: [],
   },
   reducers: {
     addCrypto(state, action) {
@@ -28,12 +29,20 @@ const portfolioSlice = createSlice({
     deleteItem(state, action) {
       state.list = state.list.filter((item) => item.id !== action.payload.id);
     },
-    setListToLocalStorage(state, action) {
+    setListFromLocalStorage(state, action) {
       state.list = action.payload;
+    },
+    updateList(state, action) {
+      state.updatedList = action.payload;
     },
   },
 });
 
 export default portfolioSlice.reducer;
-export const { addCrypto, addResult, setListToLocalStorage, deleteItem } =
-  portfolioSlice.actions;
+export const {
+  addCrypto,
+  addResult,
+  setListFromLocalStorage,
+  deleteItem,
+  updateList,
+} = portfolioSlice.actions;
