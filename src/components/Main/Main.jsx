@@ -3,9 +3,9 @@ import "./Main.scss";
 import CryptoList from "./CryptoList/CryptoList";
 import { Spinner, Table, Pagination } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { getAssets, setLoader } from "../../toolkitSlice/cryptoListSlice";
+import { fetchAssets } from "../../toolkitSlice/cryptoListSlice";
 
-const Main = ({ show, setShow, loader }) => {
+const Main = ({ show, setShow, status, error }) => {
   const dispatch = useDispatch();
   const [offset, setOffset] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
@@ -15,10 +15,10 @@ const Main = ({ show, setShow, loader }) => {
 
   useEffect(() => {
     setOffset(limit * pageNumber - limit);
-  }, [pageNumber, pagesCount]);
+  }, [dispatch, pageNumber, pagesCount]);
 
   useEffect(() => {
-    dispatch(updateAssets(limit, offset));
+    dispatch(fetchAssets([limit, offset]));
   }, [offset]);
 
   for (let i = 1; i <= pagesCount; i++) {
@@ -60,33 +60,19 @@ const Main = ({ show, setShow, loader }) => {
     }
   };
 
-  const updateAssets = (limit, offset) => {
-    return async (dispatch) => {
-      try {
-        dispatch(setLoader(true));
-        const response = await fetch(
-          `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets?limit=${limit}&offset=${offset}`,
-          {
-            method: "GET",
-            redirect: "follow",
-            headers: {
-              Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-            },
-          }
-        );
-        const json = await response.json();
-        dispatch(setLoader(false));
-        dispatch(getAssets(json.data));
-      } catch (e) {
-        console.log("Request error. Please try again", e);
-      }
-    };
-  };
-
   return (
     <main className="main">
       <div className="preloader">
-        {loader ? <Spinner animation="border" variant="primary" /> : ""}
+        {status === "loading" && (
+          <Spinner animation="border" variant="primary" />
+        )}
+        {error && (
+          <>
+            <h2>Request error. Please try again</h2>
+            <br />
+            <h3>{error}</h3>
+          </>
+        )}
       </div>
       <Table striped bordered hover size="md" className="table">
         <tbody>
@@ -108,7 +94,8 @@ const Main = ({ show, setShow, loader }) => {
 
 const mapStateToProps = (state) => {
   return {
-    loader: state.cryptoList.loader,
+    status: state.cryptoList.status,
+    error: state.cryptoList.error,
   };
 };
 

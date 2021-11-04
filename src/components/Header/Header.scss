@@ -16,6 +16,11 @@ $br: 5px;
   &__title {
     font-size: 18px;
     font-weight: 700;
+    text-align: center;
+  }
+  &__logo {
+    height: 64px;
+    width: 64px;
   }
   &__img {
     height: 64px;
@@ -29,6 +34,6 @@ $br: 5px;
   &__portfolio,
   &__trending {
     height: 100%;
-    border-left: 1px solid $color-b;
+    border-left: 1px solid rgba(0, 0, 0, 0.075);
   }
 }

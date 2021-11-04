@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
 import portfolio from "./../../portfolio.png";
+import monitorManager from "./../../monitor_manager.png";
 import TrendingList from "./TrendingList/TrendingList";
 import { Button, Modal } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
@@ -8,7 +9,7 @@ import {
   addResult,
   deleteItem,
   setListFromLocalStorage,
-  updateList,
+  fetchList,
 } from "../../toolkitSlice/portfolioSlice";
 
 const Header = ({ list, updatedList, result, assets, currentHistory }) => {
@@ -27,7 +28,9 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
   }, [list]);
 
   useEffect(() => {
-    dispatch(getUpdatedList(ids));
+    if (ids) {
+      dispatch(fetchList(ids));
+    }
   }, [assets, currentHistory]);
 
   useEffect(() => {
@@ -67,32 +70,15 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
     };
   };
 
-  const getUpdatedList = (ids) => {
-    return async (dispatch) => {
-      if (ids) {
-        try {
-          const response = await fetch(
-            `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets?ids=${ids}`,
-            {
-              method: "GET",
-              edirect: "follow",
-              headers: {
-                Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-              },
-            }
-          );
-          const json = await response.json();
-          dispatch(updateList(json.data));
-        } catch (e) {
-          console.log("Request error. Please try again", e);
-        }
-      }
-    };
-  };
-
   return (
     <header className="row header">
-      <div className="header__title col-1">Crypto</div>
+      <div className="header__title col-1">
+        <img
+          className="header__logo"
+          src={monitorManager}
+          alt="logo:portfolio"
+        />
+      </div>
       <div className="header__trending col-8 d-flex align-items-center justify-content-center">
         <TrendingList />
       </div>
