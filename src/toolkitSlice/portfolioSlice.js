@@ -1,30 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-export const fetchList = createAsyncThunk(
-  "cryptoList/fetchList",
-  async (ids, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets?ids=${ids}`,
-        {
-          method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import { fetchList } from "../utils/createAsyncThunk";
 
 const portfolioSlice = createSlice({
   name: "portfolio",
@@ -32,6 +7,8 @@ const portfolioSlice = createSlice({
     result: {},
     list: [],
     updatedList: [],
+    status: null,
+    error: null,
   },
   reducers: {
     addCrypto(state, action) {
@@ -76,5 +53,9 @@ const portfolioSlice = createSlice({
 });
 
 export default portfolioSlice.reducer;
-export const { addCrypto, addResult, setListFromLocalStorage, deleteItem } =
-  portfolioSlice.actions;
+export const {
+  addCrypto,
+  addResult,
+  setListFromLocalStorage,
+  deleteItem,
+} = portfolioSlice.actions;

@@ -4,7 +4,7 @@ import ModallAddCrypto from "../ModalAddCrypto/ModalAddCrypto";
 import { Button, Table, Spinner } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
 import { NavLink, useLocation } from "react-router-dom";
-import { fetchHistory, fetchElem } from "../../toolkitSlice/cryptoListSlice";
+import { fetchHistory, fetchElem } from "../../utils/createAsyncThunk";
 import {
   AreaChart,
   Area,

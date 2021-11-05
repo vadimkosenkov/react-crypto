@@ -1,82 +1,9 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-export const fetchAssets = createAsyncThunk(
-  "cryptoList/fetchAssets",
-  async ([limit, offset], { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets?limit=${limit}&offset=${offset}`,
-        {
-          method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const fetchHistory = createAsyncThunk(
-  "cryptoList/fetchHistory",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets/${id}/history?interval=d1`,
-        {
-          method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const fetchElem = createAsyncThunk(
-  "cryptoList/fetchElem",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `https://powerful-eyrie-68033.herokuapp.com/https://api.coincap.io/v2/assets/${id}`,
-        {
-          method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: "Bearer aa2bafd7-e4d7-45e7-aa55-208e683a85f9",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  fetchAssets,
+  fetchHistory,
+  fetchElem,
+} from "../utils/createAsyncThunk";
 
 const setError = (state, action) => {
   state.status = "rejected";

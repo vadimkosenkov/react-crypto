@@ -3,7 +3,7 @@ import "./Main.scss";
 import CryptoList from "./CryptoList/CryptoList";
 import { Spinner, Table, Pagination } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { fetchAssets } from "../../toolkitSlice/cryptoListSlice";
+import { fetchAssets } from "../../utils/createAsyncThunk";
 
 const Main = ({ show, setShow, status, error }) => {
   const dispatch = useDispatch();

@@ -5,11 +5,11 @@ import monitorManager from "./../../monitor_manager.png";
 import TrendingList from "./TrendingList/TrendingList";
 import { Button, Modal } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
+import { fetchList } from "../../utils/createAsyncThunk";
 import {
   addResult,
   deleteItem,
   setListFromLocalStorage,
-  fetchList,
 } from "../../toolkitSlice/portfolioSlice";
 
 const Header = ({ list, updatedList, result, assets, currentHistory }) => {
