@@ -11,6 +11,7 @@ import {
   deleteItem,
   setListFromLocalStorage,
 } from "../../toolkitSlice/portfolioSlice";
+import PortfolioItem from "./PortfolioItem/PortfolioItem";
 
 const Header = ({ list, updatedList, result, assets, currentHistory }) => {
   const [show, setShow] = useState(false);
@@ -86,23 +87,7 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
         <div>
           <div className="header__portfolio-items d-flex flex-column"></div>
           <div className="header__portfolio-item">Portfolio Tracker</div>
-          <div>
-            <span className="header__portfolio-item">
-              {result?.totalCost} USD
-            </span>
-            <span
-              className={
-                result?.diffCost >= 0
-                  ? "header__portfolio-item header__portfolio-item_color_green"
-                  : "header__portfolio-item header__portfolio-item_color_red"
-              }
-            >
-              {" " + result?.diffCost}
-            </span>
-            <span className="header__portfolio-item">
-              {" " + result?.diffPersent}%
-            </span>
-          </div>
+          {result === undefined ? <PortfolioItem result={result} /> : ""}
         </div>
         <img
           className="header__img header__img_animated"
