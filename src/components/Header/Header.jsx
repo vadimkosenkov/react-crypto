@@ -87,7 +87,7 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
         <div>
           <div className="header__portfolio-items d-flex flex-column"></div>
           <div className="header__portfolio-item">Portfolio Tracker</div>
-          {result === undefined ? <PortfolioItem result={result} /> : ""}
+          {result?.totalCost ? <PortfolioItem result={result} /> : ""}
         </div>
         <img
           className="header__img header__img_animated"
