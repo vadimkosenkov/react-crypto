@@ -10,8 +10,8 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="app">
-        <div className="wrap">
+      <div className="app app_bg-color_b">
+        <div className="wrap wrap_bg-color_w">
           <Header />
           <Route
             exact

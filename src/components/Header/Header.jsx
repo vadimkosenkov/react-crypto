@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Header.scss";
-import portfolio from "./../../portfolio.png";
-import monitorManager from "./../../monitor_manager.png";
+import portfolio from "./../../assets/portfolio.png";
+import monitorManager from "./../../assets/monitor_manager.png";
 import TrendingList from "./TrendingList/TrendingList";
 import { Button, Modal } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
@@ -71,10 +71,10 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
   };
 
   return (
-    <header className="row header">
+    <header className="row header header_bg-color_g">
       <div className="header__title col-1">
         <img
-          className="header__logo"
+          className="header__img"
           src={monitorManager}
           alt="logo:portfolio"
         />
@@ -83,10 +83,29 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
         <TrendingList />
       </div>
       <div className="header__portfolio col-3 d-flex justify-content-around align-items-center">
-        Portfolio Tracker <br />
-        {result?.totalCost} USD {result?.diffCost} ({result?.diffPersent}%)
+        <div>
+          <div className="header__portfolio-items d-flex flex-column"></div>
+          <div className="header__portfolio-item">Portfolio Tracker</div>
+          <div>
+            <span className="header__portfolio-item">
+              {result?.totalCost} USD
+            </span>
+            <span
+              className={
+                result?.diffCost >= 0
+                  ? "header__portfolio-item header__portfolio-item_color_green"
+                  : "header__portfolio-item header__portfolio-item_color_red"
+              }
+            >
+              {" " + result?.diffCost}
+            </span>
+            <span className="header__portfolio-item">
+              {" " + result?.diffPersent}%
+            </span>
+          </div>
+        </div>
         <img
-          className="header__img"
+          className="header__img header__img_animated"
           src={portfolio}
           alt="logo:portfolio"
           onClick={handleShow}

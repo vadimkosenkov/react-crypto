@@ -1,39 +1,48 @@
 $color-b: #1f1e1c;
 $color-g: #e1e3e4;
+$color-green: #16c784;
+$color-red: #ea3943;
 $br: 5px;
 
-.header.row {
+.header {
   width: 100%;
   margin: 0;
-  background-color: $color-g;
   height: 60px;
   align-items: center;
   border-radius: $br $br 0 0;
   box-shadow: 0px 0px 5px 0 $color-b;
-}
-
-.header {
+  &_bg-color_g {
+    background-color: $color-g;
+  }
   &__title {
     font-size: 18px;
     font-weight: 700;
     text-align: center;
   }
-  &__logo {
-    height: 64px;
-    width: 64px;
-  }
   &__img {
     height: 64px;
     width: 64px;
-    transition: 0.2s;
-    cursor: pointer;
-    &:hover {
-      transform: rotate(10deg);
+    &_animated {
+      transition: 0.2s;
+      cursor: pointer;
+      &:hover {
+        transform: rotate(10deg);
+      }
     }
   }
   &__portfolio,
   &__trending {
     height: 100%;
     border-left: 1px solid rgba(0, 0, 0, 0.075);
+    font-size: 14px;
+  }
+  &__portfolio-item {
+    font-size: 14px;
+    &_color_green {
+      color: $color-green;
+    }
+    &_color_red {
+      color: $color-red;
+    }
   }
 }

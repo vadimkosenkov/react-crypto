@@ -8,25 +8,30 @@ $br: 5px;
   margin: 0;
   padding: 0;
   font-family: "Fira Sans", sans-serif;
-  font-weight: 400;
+  font-family: "Source Sans Pro", sans-serif;
+  font-weight: 600;
   color: $color-b;
   font-size: 12px;
 }
 
 .app {
   height: 100vh;
-  background-color: $color-b;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  &_bg-color_b {
+    background-color: $color-b;
+  }
 }
 
 .wrap {
   width: 95%;
   height: 90%;
-  background-color: $color-w;
   border-radius: $br;
+  &_bg-color_w {
+    background-color: $color-w;
+  }
 }
 
 .preloader {

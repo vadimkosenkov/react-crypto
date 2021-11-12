@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./Details.scss";
 import ModallAddCrypto from "../ModalAddCrypto/ModalAddCrypto";
 import { Button, Table, Spinner } from "react-bootstrap";
 import { connect, useDispatch } from "react-redux";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { fetchHistory, fetchElem } from "../../utils/createAsyncThunk";
 import {
   AreaChart,
@@ -23,15 +23,15 @@ const Details = ({
   error,
 }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
+  const params = useParams();
   const handleShow = () => setShow(true);
   const correctedHistory = [];
-  const currentId = location.pathname.split("/")[2];
+  const currentId = params?.id;
 
   useEffect(() => {
     dispatch(fetchElem(currentId));
     dispatch(fetchHistory(currentId));
-  }, [location]);
+  }, [params]);
 
   currentHistory.map((elem, i) => {
     if (i % 7 === 0) {

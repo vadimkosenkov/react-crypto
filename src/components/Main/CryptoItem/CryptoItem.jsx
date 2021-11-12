@@ -21,7 +21,7 @@ const CryptoItem = ({ elem, show, setShow }) => {
   return (
     <>
       <tr
-        className="table__item"
+        className="table__items"
         onClick={() => {
           routeChange(elem);
         }}
@@ -31,13 +31,23 @@ const CryptoItem = ({ elem, show, setShow }) => {
             BUY
           </Button>
         </td>
-        <td className="col-2 h5">{elem.name}</td>
-        <td className="col-1 h5">{elem.symbol}</td>
-        <td className="col-3 h4">{`$ ${shorterValue(elem.priceUsd)}`}</td>
-        <td className="col-2 h5">{`${shorterValue(
-          elem.changePercent24Hr
-        )} %`}</td>
-        <td className="col-3">{`$ ${shorterValue(elem.marketCapUsd)}`}</td>
+        <td className="col-2 h5 table__item ">{elem.name}</td>
+        <td className="col-1 h5 table__item table__item_color_dg">
+          {elem.symbol}
+        </td>
+        <td className="col-3 h4 table__item">{`$ ${shorterValue(
+          elem.priceUsd
+        )}`}</td>
+        <td
+          className={
+            elem.changePercent24Hr >= 0
+              ? "col-2 h5 table__item table__item_color_green"
+              : "col-2 h5 table__item table__item_color_red"
+          }
+        >{`${shorterValue(elem.changePercent24Hr)} %`}</td>
+        <td className="col-3 h5 table__item">{`$ ${shorterValue(
+          elem.marketCapUsd
+        )}`}</td>
       </tr>
       <ModallAddCrypto elem={elem} show={show} setShow={setShow} />
     </>
