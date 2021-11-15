@@ -29,6 +29,7 @@ $br: 5px;
   width: 95%;
   height: 90%;
   border-radius: $br;
+  overflow-y: auto;
   &_bg-color_w {
     background-color: $color-w;
   }
