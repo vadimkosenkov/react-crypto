@@ -3,10 +3,12 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  overflow: auto;
 }
 
 .table.table-md.table-striped.table-bordered.table-hover {
   margin: 0;
+  min-width: 700px;
 }
 
 .pagination {

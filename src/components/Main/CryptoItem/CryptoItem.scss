@@ -10,6 +10,7 @@ $color-dg: rgb(128, 138, 157);
   }
   &__item {
     font-weight: 600;
+    transition: 0.2s;
     &_color_dg {
       color: $color-dg !important;
     }
@@ -18,6 +19,17 @@ $color-dg: rgb(128, 138, 157);
     }
     &_color_green {
       color: $color-green !important;
+    }
+  }
+}
+
+@media (max-width: 700px) {
+  .table {
+    &__item.h5 {
+      font-size: 14px !important;
+    }
+    &__item.h4 {
+      font-size: 16px !important;
     }
   }
 }
