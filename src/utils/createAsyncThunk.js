@@ -1,13 +1,15 @@
+// API doc: https://pro.coincap.io/api-docs
+
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-const { REACT_APP_PROXY, REACT_APP_API, REACT_APP_API_KEY } = process.env;
+const { REACT_APP_API, REACT_APP_API_KEY } = process.env;
 
 export const fetchAssets = createAsyncThunk(
   "cryptoList/fetchAssets",
   async ([limit, offset], { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${REACT_APP_PROXY}/${REACT_APP_API}/v2/assets?limit=${limit}&offset=${offset}`,
+        `${REACT_APP_API}/v3/assets?limit=${limit}&offset=${offset}`,
         {
           method: "GET",
           redirect: "follow",
@@ -33,7 +35,7 @@ export const fetchHistory = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${REACT_APP_PROXY}/${REACT_APP_API}/v2/assets/${id}/history?interval=d1`,
+        `${REACT_APP_API}/v3/assets/${id}/history?interval=d1`,
         {
           method: "GET",
           redirect: "follow",
@@ -59,7 +61,7 @@ export const fetchElem = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${REACT_APP_PROXY}/${REACT_APP_API}/v2/assets/${id}`,
+        `${REACT_APP_API}/v3/assets/${id}`,
         {
           method: "GET",
           redirect: "follow",
@@ -85,7 +87,7 @@ export const fetchList = createAsyncThunk(
   async (ids, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${REACT_APP_PROXY}/${REACT_APP_API}/v2/assets?ids=${ids}`,
+        `${REACT_APP_API}/v3/assets?ids=${ids}`,
         {
           method: "GET",
           redirect: "follow",
