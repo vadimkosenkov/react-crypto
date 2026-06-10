@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./Details.scss";
 import ModallAddCrypto from "../ModalAddCrypto/ModalAddCrypto";
 import { Button, Table, Spinner } from "react-bootstrap";
@@ -27,11 +27,19 @@ const Details = ({
   const handleShow = () => setShow(true);
   const correctedHistory = [];
   const currentId = params?.id;
+  const [graph, setGraph] = useState({ width: "", height: "" });
 
   useEffect(() => {
     dispatch(fetchElem(currentId));
     dispatch(fetchHistory(currentId));
-  }, [params]);
+  }, [dispatch, params, currentId]);
+
+  useEffect(() => {
+    setGraph({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }, []);
 
   currentHistory.map((elem, i) => {
     if (i % 7 === 0) {
@@ -43,65 +51,53 @@ const Details = ({
   });
 
   return (
-    <div className="details">
-      {status === "loading" ? (
-        <div className="preloader">
-          <Spinner animation="border" variant="primary" />
-        </div>
-      ) : (
-        <>
-          {error ? (
-            <div className="preloader">
-              <h2>Request error. Please try again</h2>
-              <br />
-              <h3>{error}</h3>
-            </div>
-          ) : (
-            <>
-              <h1 className="my-2"> {currentElem.name} details info</h1>
-              <div className="details__table">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Rank</th>
-                      <th>Name</th>
-                      <th>Symbol</th>
-                      <th>Price USD</th>
-                      <th>Change Percent 24Hr</th>
-                      <th>Vwap 24Hr</th>
-                      <th>Market Cap Usd</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{currentElem.rank}</td>
-                      <td>{currentElem.name}</td>
-                      <td>{currentElem.symbol}</td>
-                      <td>{`$ ${currentElem.priceUsd}`}</td>
-                      <td>{`${currentElem.changePercent24Hr} %`}</td>
-                      <td>{currentElem.vwap24Hr}</td>
-                      <td>{`$ ${currentElem.marketCapUsd}`}</td>
-                    </tr>
-                  </tbody>
-                </Table>
-                <NavLink to="/" className="text-decoration-none">
-                  <Button variant="secondary" size="lg">
-                    BACK
-                  </Button>
-                </NavLink>
-                <Button
-                  variant="primary"
-                  size="lg"
-                  className="mx-2"
-                  onClick={handleShow}
-                >
-                  BUY
-                </Button>
+    <>
+      <h1 className="my-2 text-center"> {currentElem.name} details info</h1>
+      <div className="details">
+        {status === "loading" ? (
+          <div className="preloader">
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <>
+            {error ? (
+              <div className="preloader">
+                <h2>Request error. Please try again</h2>
+                <br />
+                <h3>{error}</h3>
               </div>
-              <div className="d-flex justify-content-center">
+            ) : (
+              <>
+                <div className="details__table">
+                  <Table striped bordered hover>
+                    <thead>
+                      <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Symbol</th>
+                        <th>Price USD</th>
+                        <th>Change Percent 24Hr</th>
+                        <th>Vwap 24Hr</th>
+                        <th>Market Cap Usd</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{currentElem.rank}</td>
+                        <td>{currentElem.name}</td>
+                        <td>{currentElem.symbol}</td>
+                        <td>{`$ ${currentElem.priceUsd}`}</td>
+                        <td>{`${currentElem.changePercent24Hr} %`}</td>
+                        <td>{currentElem.vwap24Hr}</td>
+                        <td>{`$ ${currentElem.marketCapUsd}`}</td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+
                 <AreaChart
-                  width={1200}
-                  height={340}
+                  width={graph.width > 893 ? graph.width * 0.95 - 20 : 840}
+                  height={graph.height * 0.75 - 160}
                   data={correctedHistory}
                   margin={{
                     top: 10,
@@ -121,13 +117,28 @@ const Details = ({
                     fill="#8884d8"
                   />
                 </AreaChart>
-              </div>
-            </>
-          )}
-        </>
-      )}
-      <ModallAddCrypto elem={currentElem} show={show} setShow={setShow} />
-    </div>
+              </>
+            )}
+          </>
+        )}
+        <ModallAddCrypto elem={currentElem} show={show} setShow={setShow} />
+      </div>
+      <div className="details__btns d-flex justify-content-center">
+        <NavLink to="/" className="text-decoration-none">
+          <Button variant="secondary" size="lg">
+            BACK
+          </Button>
+        </NavLink>
+        <Button
+          variant="primary"
+          size="lg"
+          className="mx-2"
+          onClick={handleShow}
+        >
+          BUY
+        </Button>
+      </div>
+    </>
   );
 };
 

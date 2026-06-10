@@ -1,7 +1,8 @@
 .details {
   text-align: center;
-  min-height: 473px;
+  overflow: auto;
 }
 .details__table {
   min-height: 76px;
+  min-width: 850px;
 }

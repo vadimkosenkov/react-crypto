@@ -32,13 +32,13 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
     if (ids) {
       dispatch(fetchList(ids));
     }
-  }, [assets, currentHistory]);
+  }, [dispatch, ids, assets, currentHistory]);
 
   useEffect(() => {
     if (list?.length && updatedList?.length) {
       dispatch(addResult(portfolioTotal(list, updatedList)));
     }
-  }, [updatedList]);
+  }, [dispatch, list, updatedList]);
 
   const setDataToLocalStorage = (list) => {
     localStorage.setItem("list", JSON.stringify(list));
@@ -75,7 +75,7 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
     <header className="row header header_bg-color_g">
       <div className="header__title col-1">
         <img
-          className="header__img"
+          className="header__img header__img_responsive_hide"
           src={monitorManager}
           alt="logo:portfolio"
         />
@@ -85,8 +85,9 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
       </div>
       <div className="header__portfolio col-3 d-flex justify-content-around align-items-center">
         <div>
-          <div className="header__portfolio-items d-flex flex-column"></div>
-          <div className="header__portfolio-item">Portfolio Tracker</div>
+          <div className="header__portfolio-item header__portfolio-item_response_hide header__portfolio-item_size_l">
+            Portfolio Tracker
+          </div>
           {result?.totalCost ? <PortfolioItem result={result} /> : ""}
         </div>
         <img

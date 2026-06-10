@@ -19,7 +19,7 @@ const Main = ({ show, setShow, status, error }) => {
 
   useEffect(() => {
     dispatch(fetchAssets([limit, offset]));
-  }, [offset]);
+  }, [dispatch, offset]);
 
   for (let i = 1; i <= pagesCount; i++) {
     items.push(
@@ -61,24 +61,26 @@ const Main = ({ show, setShow, status, error }) => {
   };
 
   return (
-    <main className="main">
-      <div className="preloader">
-        {status === "loading" && (
-          <Spinner animation="border" variant="primary" />
-        )}
-        {error && (
-          <>
-            <h2>Request error. Please try again</h2>
-            <br />
-            <h3>{error}</h3>
-          </>
-        )}
-      </div>
-      <Table striped bordered hover size="md" className="table">
-        <tbody>
-          <CryptoList show={show} setShow={setShow} />
-        </tbody>
-      </Table>
+    <>
+      <main className="main">
+        <div className="preloader">
+          {status === "loading" && (
+            <Spinner animation="border" variant="primary" />
+          )}
+          {error && (
+            <>
+              <h2>Request error. Please try again</h2>
+              <br />
+              <h3>{error}</h3>
+            </>
+          )}
+        </div>
+        <Table striped bordered hover size="md" className="table">
+          <tbody>
+            <CryptoList show={show} setShow={setShow} />
+          </tbody>
+        </Table>
+      </main>
       <Pagination>
         <Pagination.Prev disabled={pageNumber === 1} onClick={prevClick} />
         {items}
@@ -88,7 +90,7 @@ const Main = ({ show, setShow, status, error }) => {
         />
         <Pagination.Next disabled={pageNumber === 20} onClick={nextClick} />
       </Pagination>
-    </main>
+    </>
   );
 };
 

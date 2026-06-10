@@ -1,8 +1,9 @@
 import React from "react";
+import "./PortfolioItem.scss";
 
 const PortfolioItem = ({ result }) => {
   return (
-    <div>
+    <div className="header__portfolio-items">
       <span className="header__portfolio-item">{result?.totalCost} USD</span>
       <span
         className={
