@@ -1,0 +1,6 @@
+[[redirects]]
+  from = "/api/*"
+  to = "https://rest.coincap.io/v3/:splat"
+  status = 200
+  force = true
+  headers = {Authorization = "Bearer 70beff4a95b1300eaa02bd37c48aa9e2edffd8fb36834005d0c0c52d6e6ebfae"}

@@ -1,21 +1,18 @@
 // API doc: https://pro.coincap.io/api-docs
+// Local run with netlify CLI https://docs.netlify.com/api-and-cli-guides/cli-guides/get-started-with-cli/
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
-const { REACT_APP_API, REACT_APP_API_KEY } = process.env;
 
 export const fetchAssets = createAsyncThunk(
   "cryptoList/fetchAssets",
   async ([limit, offset], { rejectWithValue }) => {
     try {
       const response = await fetch(
-        `${REACT_APP_API}/v3/assets?limit=${limit}&offset=${offset}`,
+        // Changing the URL to use Netlify proxy, check netlify.toml for details
+        `/api/assets?limit=${limit}&offset=${offset}`,
         {
           method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: `Bearer ${REACT_APP_API_KEY}`,
-          },
+          redirect: "follow"
         }
       );
 
@@ -34,14 +31,12 @@ export const fetchHistory = createAsyncThunk(
   "cryptoList/fetchHistory",
   async (id, { rejectWithValue }) => {
     try {
+      // Changing the URL to use Netlify proxy, check netlify.toml for details
       const response = await fetch(
-        `${REACT_APP_API}/v3/assets/${id}/history?interval=d1`,
+        `/api/assets/${id}/history?interval=d1`,
         {
           method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: `Bearer ${REACT_APP_API_KEY}`,
-          },
+          redirect: "follow"
         }
       );
 
@@ -60,14 +55,12 @@ export const fetchElem = createAsyncThunk(
   "cryptoList/fetchElem",
   async (id, { rejectWithValue }) => {
     try {
+      // Changing the URL to use Netlify proxy, check netlify.toml for details
       const response = await fetch(
-        `${REACT_APP_API}/v3/assets/${id}`,
+        `/api/assets/${id}`,
         {
           method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: `Bearer ${REACT_APP_API_KEY}`,
-          },
+          redirect: "follow"
         }
       );
 
@@ -86,14 +79,12 @@ export const fetchList = createAsyncThunk(
   "cryptoList/fetchList",
   async (ids, { rejectWithValue }) => {
     try {
+      // Changing the URL to use Netlify proxy, check netlify.toml for details
       const response = await fetch(
-        `${REACT_APP_API}/v3/assets?ids=${ids}`,
+        `/api/assets?ids=${ids}`,
         {
           method: "GET",
-          redirect: "follow",
-          headers: {
-            Authorization: `Bearer ${REACT_APP_API_KEY}`,
-          },
+          redirect: "follow"
         }
       );
 
