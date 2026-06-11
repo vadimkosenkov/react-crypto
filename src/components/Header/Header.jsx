@@ -35,9 +35,9 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
   }, [dispatch, ids, assets, currentHistory]);
 
   useEffect(() => {
-    if (list?.length && updatedList?.length) {
-      dispatch(addResult(portfolioTotal(list, updatedList)));
-    }
+    list?.length && updatedList?.length
+      ? dispatch(addResult(portfolioTotal(list, updatedList)))
+      : dispatch(addResult({}));
   }, [dispatch, list, updatedList]);
 
   const setDataToLocalStorage = (list) => {
@@ -55,7 +55,9 @@ const Header = ({ list, updatedList, result, assets, currentHistory }) => {
     const myTotalArr = list?.map((elem) => elem.amount * elem.priceUsd);
     const myTotalCost = myTotalArr.reduce((sum, current) => sum + current, 0);
 
-    const totalArr = updatedList?.map((elem) => {
+    const totalArr = updatedList
+      ?.filter(elem => list?.some(item => item.id === elem.id))
+      ?.map((elem) => {
       const amount = list?.find((item) => item.id === elem.id).amount;
       return amount * elem.priceUsd;
     });

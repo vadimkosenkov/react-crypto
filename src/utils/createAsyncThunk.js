@@ -3,24 +3,50 @@
 
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+const REACT_APP_API = "https://rest.coincap.io";
+
+const REACT_APP_API_KEY_LOCAL = "70beff4a95b1300eaa02bd37c48aa9e2edffd8fb36834005d0c0c52d6e6ebfae";
+
+// For `netlify dev` and netlify deploy.
+const shouldUseNetlifyProxy = () => {
+  if (window.location.hostname !== "localhost") {
+    return true;
+  }
+  return window.location.port === "8888";
+};
+
+// Helper for API response handling.
+const handleApiResponse = async (response) => {
+  if (!response.ok) {
+    throw new Error("Server Error");
+  }
+  const json = await response.json();
+  return json.data;
+};
+
+// Helper for URL generation and headers based on env.
+const buildApiConfig = (endpoint, queryString = "") => {
+  const query = queryString ? `?${queryString}` : "";
+  const isNetlify = shouldUseNetlifyProxy();
+  return {
+    url: isNetlify ? `/api/${endpoint}${query}` : `${REACT_APP_API}/v3/${endpoint}${query}`,
+    headers: isNetlify ? {} : { Authorization: `Bearer ${REACT_APP_API_KEY_LOCAL}` }
+  }
+};
+
 export const fetchAssets = createAsyncThunk(
   "cryptoList/fetchAssets",
   async ([limit, offset], { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        // Changing the URL to use Netlify proxy, check netlify.toml for details
-        `/api/assets?limit=${limit}&offset=${offset}`,
-        {
-          method: "GET",
-          redirect: "follow"
-        }
-      );
+      const { url, headers } = buildApiConfig("assets", `limit=${limit}&offset=${offset}`);
 
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
+      const response = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        headers
+      });
+
+      return await handleApiResponse(response);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -31,20 +57,15 @@ export const fetchHistory = createAsyncThunk(
   "cryptoList/fetchHistory",
   async (id, { rejectWithValue }) => {
     try {
-      // Changing the URL to use Netlify proxy, check netlify.toml for details
-      const response = await fetch(
-        `/api/assets/${id}/history?interval=d1`,
-        {
-          method: "GET",
-          redirect: "follow"
-        }
-      );
+      const { url, headers } = buildApiConfig(`assets/${id}/history`, `interval=d1`);
 
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
+      const response = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        headers
+      });
+
+      return await handleApiResponse(response);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -55,20 +76,15 @@ export const fetchElem = createAsyncThunk(
   "cryptoList/fetchElem",
   async (id, { rejectWithValue }) => {
     try {
-      // Changing the URL to use Netlify proxy, check netlify.toml for details
-      const response = await fetch(
-        `/api/assets/${id}`,
-        {
-          method: "GET",
-          redirect: "follow"
-        }
-      );
+      const { url, headers } = buildApiConfig(`assets/${id}`);
 
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
+      const response = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        headers
+      });
+
+      return await handleApiResponse(response);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -79,20 +95,15 @@ export const fetchList = createAsyncThunk(
   "cryptoList/fetchList",
   async (ids, { rejectWithValue }) => {
     try {
-      // Changing the URL to use Netlify proxy, check netlify.toml for details
-      const response = await fetch(
-        `/api/assets?ids=${ids}`,
-        {
-          method: "GET",
-          redirect: "follow"
-        }
-      );
+      const { url, headers } = buildApiConfig(`assets`, `ids=${ids}`);
 
-      if (!response.ok) {
-        throw new Error("Server Error");
-      }
-      const json = await response.json();
-      return json.data;
+      const response = await fetch(url, {
+        method: "GET",
+        redirect: "follow",
+        headers
+      });
+
+      return await handleApiResponse(response);
     } catch (error) {
       return rejectWithValue(error.message);
     }
