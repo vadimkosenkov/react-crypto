@@ -48,7 +48,6 @@ A modern Single Page Application (SPA) for tracking cryptocurrency market data a
 
 ### 1. Clone the repository
 
-bash git clone https://github.com/vadimkosenkov/react-crypto.git cd react-crypto 
 ```bash
 git clone https://github.com/vadimkosenkov/react-crypto.git
 cd react-crypto
